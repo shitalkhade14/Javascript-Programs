@@ -36,13 +36,14 @@
 <body>
     <button id="openModalBtn">Open Modal</button>
 
-    <div id="myModal" class="modal" role="dialog" aria-label=" This is simple Modal Dialog">
+    <div id="myModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="This is a simple Modal Dialog">
         <div class="modal-content">
-            <span class="close" id="closeModalBtn" role="button" aria-label="Close"tabindex="0" >&times;</span>
+            <span class="close" id="closeModalBtn" role="button" aria-label="Close" tabindex="0">&times;</span>
+            <h1>Modal Dialog</h1>
             <p>This is a simple modal dialog.</p>
             <button id="cancelModalBtn">Cancel</button>
         </div>
-    </div>      
+    </div>
 
     <script>
         // Get the modal and buttons
@@ -54,30 +55,31 @@
         // Open the modal
         openModalBtn.addEventListener("click", function() {
             modal.style.display = "block";
-            modal.querySelector(".modal-content").focus();
-});
+            closeModalBtn.focus(); // Set focus to the "Close" button
+        });
 
-modal.addEventListener("keydown", function(event) {
-    if (event.key === "Tab") {
-        var focusableElements = modal.querySelectorAll("a, button, input, select, textarea, [tabindex]:not([tabindex='-1'])");
-        var firstElement = focusableElements[0];
-        var lastElement = focusableElements[focusableElements.length - 1];
+        modal.addEventListener("keydown", function(event) {
+            if (event.key === "Tab") {
+                var focusableElements = modal.querySelectorAll("a, button, input, select, textarea, [tabindex]:not([tabindex='-1'])");
+                var firstElement = focusableElements[0];
+                var lastElement = focusableElements[focusableElements.length - 1];
 
-        if (event.shiftKey) {
-            // If Shift+Tab is pressed and focus is on the first element, move focus to the last element
-            if (document.activeElement === firstElement) {
-                event.preventDefault();
-                lastElement.focus();
+                if (event.shiftKey) {
+                    // If Shift+Tab is pressed and focus is on the first element, move focus to the last element
+                    if (document.activeElement === firstElement) {
+                        event.preventDefault();
+                        lastElement.focus();
+                    }
+                } else {
+                    // If Tab is pressed and focus is on the last element, move focus to the first element
+                    if (document.activeElement === lastElement) {
+                        event.preventDefault();
+                        firstElement.focus();
+                    }
+                }
             }
-        } else {
-            // If Tab is pressed and focus is on the last element, move focus to the first element
-            if (document.activeElement === lastElement) {
-                event.preventDefault();
-                firstElement.focus();
-            }
-        }
-    }
-});
+        });
+
         // Close the modal
         function closeModal() {
             modal.style.display = "none";
@@ -99,6 +101,14 @@ modal.addEventListener("keydown", function(event) {
                 closeModal();
             }
         });
+
+        // Close the modal when Enter key is pressed on the close button
+        closeModalBtn.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                closeModal();
+            }
+        });
     </script>
 </body>
 </html>
+
